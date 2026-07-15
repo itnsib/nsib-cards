@@ -1,0 +1,9 @@
+{
+  "comment": "Use this AFTER you add Firebase Authentication to the admin panel. Public can read cards; only signed-in users can write.",
+  "rules": {
+    "cards": {
+      ".read": true,
+      ".write": "auth != null"
+    }
+  }
+}

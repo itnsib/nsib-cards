@@ -1,0 +1,61 @@
+:root {
+  /* NSIB brand — sampled from the official logo */
+  --crimson: #C62727;
+  --crimson-deep: #9E1B1B;
+  --crimson-ink: #5f0f0f;
+  --gold: #F1C228;
+  --gold-deep: #E7AD15;
+  --gold-bright: #FFDA2C;
+
+  --ink: #1a1310;
+  --paper: #faf7f2;
+  --paper-2: #ffffff;
+  --line: #ece3d6;
+  --muted: #8a7d6f;
+  --accent: var(--crimson);
+
+  --font-display: "Georgia", "Times New Roman", serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --radius: 18px;
+  --shadow: 0 10px 40px -12px rgba(120, 20, 20, 0.28);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { min-height: 100%; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+:focus-visible {
+  outline: 3px solid var(--gold-deep);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Shared button styles */
+.btn {
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: transform 0.12s ease, box-shadow 0.2s ease;
+}
+.btn:active { transform: scale(0.98); }
+.btn.primary {
+  background: var(--crimson);
+  color: #fff;
+  box-shadow: 0 8px 20px -8px rgba(158, 27, 27, 0.55);
+}
+.btn.primary:disabled { opacity: 0.6; cursor: default; }
+.btn.ghost { background: var(--paper); color: var(--crimson-ink); border: 1px solid var(--line); }

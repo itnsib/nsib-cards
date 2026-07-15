@@ -1,0 +1,25 @@
+{
+  "cards": {
+    "kiran": {
+      "name": "Kiran",
+      "title": "IT Lead",
+      "department": "Information Technology",
+      "phone": "+971 4 705 8000",
+      "email": "kiran@nsib.ae",
+      "website": "https://nsib.ae",
+      "location": "Business Bay, Dubai, UAE"
+    },
+    "demo": {
+      "name": "Your Name",
+      "title": "Insurance Advisor",
+      "department": "Medical Insurance",
+      "phone": "+971 4 705 8000",
+      "mobile": "+971 55 123 4567",
+      "email": "you@nsib.ae",
+      "whatsapp": "+971551234567",
+      "linkedin": "https://linkedin.com/in/yourprofile",
+      "website": "https://nsib.ae",
+      "location": "Business Bay, Dubai, UAE"
+    }
+  }
+}
