@@ -9,6 +9,7 @@ export default function CardPage() {
   const { slug } = useParams();
   const card = useCard(slug);
   const [nfcStatus, setNfcStatus] = useState("");
+  const [shareMsg, setShareMsg] = useState("");
   const [showQR, setShowQR] = useState(false);
 
   const cardUrl = useMemo(
@@ -37,6 +38,7 @@ export default function CardPage() {
   }
 
   const accent = card.accent || "#C62727";
+  const isAdmin = sessionStorage.getItem("nsib_admin_ok") === "1";
 
   async function writeNfc() {
     if (!("NDEFReader" in window)) {
@@ -60,7 +62,8 @@ export default function CardPage() {
       } catch { /* user cancelled */ }
     } else {
       await navigator.clipboard.writeText(cardUrl);
-      setNfcStatus("Link copied to clipboard.");
+      setShareMsg("Link copied to clipboard.");
+      setTimeout(() => setShareMsg(""), 2500);
     }
   }
 
@@ -90,6 +93,8 @@ export default function CardPage() {
             <button className="btn ghost" onClick={shareCard}>Share</button>
           </div>
 
+          {shareMsg && <p className="share-msg">{shareMsg}</p>}
+
           <ul className="rows">
             {card.mobile && <Row label="Mobile" value={card.mobile} href={`tel:${card.mobile}`} />}
             {card.phone && <Row label="Office" value={card.phone} href={`tel:${card.phone}`} />}
@@ -102,21 +107,25 @@ export default function CardPage() {
             {card.location && <Row label="Location" value={card.location} />}
           </ul>
 
-          <div className="share-tools">
-            <button className="tool" onClick={() => setShowQR((v) => !v)}>
-              {showQR ? "Hide QR code" : "Show QR code"}
-            </button>
-            <button className="tool" onClick={writeNfc}>Write to NFC tag</button>
-          </div>
+          {isAdmin && (
+            <>
+              <div className="share-tools">
+                <button className="tool" onClick={() => setShowQR((v) => !v)}>
+                  {showQR ? "Hide QR code" : "Show QR code"}
+                </button>
+                <button className="tool" onClick={writeNfc}>Write to NFC tag</button>
+              </div>
 
-          {showQR && (
-            <div className="qr">
-              <QRCodeCanvas value={cardUrl} size={168} fgColor="#0A1F3C" level="M" includeMargin />
-              <span>Scan to open this card</span>
-            </div>
+              {showQR && (
+                <div className="qr">
+                  <QRCodeCanvas value={cardUrl} size={168} fgColor="#0A1F3C" level="M" includeMargin />
+                  <span>Scan to open this card</span>
+                </div>
+              )}
+
+              {nfcStatus && <p className="nfc-status">{nfcStatus}</p>}
+            </>
           )}
-
-          {nfcStatus && <p className="nfc-status">{nfcStatus}</p>}
         </div>
 
         <div className="card-foot">

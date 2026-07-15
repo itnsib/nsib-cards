@@ -164,3 +164,13 @@
 }
 .empty h1 { font-family: var(--font-display); color: var(--crimson-ink); }
 .empty p { color: var(--muted); }
+
+.share-msg {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--gold) 20%, #fff);
+  border-radius: 10px;
+  color: var(--crimson-ink);
+  font-size: 0.85rem;
+  text-align: center;
+}
