@@ -1,50 +1,68 @@
 import { useState } from "react";
+import { useAuth, login, authErrorMessage } from "../lib/auth";
 import "./Admin.css";
 
-// Simple shared-password gate. The password is set via VITE_ADMIN_PASSWORD.
-// This guards the UI; the real protection for your data is Firebase security rules.
-// Unlock persists for the browser session only (sessionStorage).
+// Real Firebase Auth gate. Only signed-in users reach the admin.
+// Create admin users in Firebase Console -> Authentication -> Users -> Add user.
 
-const KEY = "nsib_admin_ok";
-
-export default function PasswordGate({ children }) {
-  const [ok, setOk] = useState(() => sessionStorage.getItem(KEY) === "1");
-  const [input, setInput] = useState("");
+export default function LoginGate({ children }) {
+  const user = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
-    const expected = import.meta.env.VITE_ADMIN_PASSWORD;
-    if (!expected) {
-      setErr("No admin password is configured. Set VITE_ADMIN_PASSWORD.");
-      return;
+    setErr("");
+    setBusy(true);
+    try {
+      await login(email.trim(), password);
+      // onAuthStateChanged flips `user` and renders children automatically.
+    } catch (ex) {
+      setErr(authErrorMessage(ex.code));
     }
-    if (input === expected) {
-      sessionStorage.setItem(KEY, "1");
-      setOk(true);
-    } else {
-      setErr("Incorrect password.");
-      setInput("");
-    }
+    setBusy(false);
   }
 
-  if (ok) return children;
+  // Still checking the session
+  if (user === undefined) {
+    return (
+      <div className="gate">
+        <div className="gate-box"><p>Checking sign-in…</p></div>
+      </div>
+    );
+  }
 
+  // Signed in -> show the admin
+  if (user) return children;
+
+  // Signed out -> login form
   return (
     <div className="gate">
       <form className="gate-box" onSubmit={submit}>
         <img src="/nsib-crest.png" alt="NSIB" width="64" />
-        <h1>Admin access</h1>
-        <p>Enter the admin password to manage cards.</p>
+        <h1>Admin sign in</h1>
+        <p>Sign in to manage cards.</p>
         <input
-          type="password"
-          value={input}
-          onChange={(e) => { setInput(e.target.value); setErr(""); }}
-          placeholder="Password"
+          type="email"
+          value={email}
+          onChange={(e) => { setEmail(e.target.value); setErr(""); }}
+          placeholder="Email"
+          autoComplete="username"
           autoFocus
         />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => { setPassword(e.target.value); setErr(""); }}
+          placeholder="Password"
+          autoComplete="current-password"
+        />
         {err && <span className="gate-err">{err}</span>}
-        <button type="submit" className="btn primary">Unlock</button>
+        <button type="submit" className="btn primary" disabled={busy}>
+          {busy ? "Signing in…" : "Sign in"}
+        </button>
       </form>
     </div>
   );

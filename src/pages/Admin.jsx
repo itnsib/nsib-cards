@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCards, saveCard, deleteCard, slugExists, emptyCard } from "../lib/cardsDb";
+import { useAuth, logout } from "../lib/auth";
 import "./Admin.css";
 
 const FIELDS = [
@@ -23,6 +24,7 @@ function slugify(name) {
 
 export default function Admin() {
   const { cards, error } = useCards();
+  const user = useAuth();
   const [editing, setEditing] = useState(null); // card object or null
   const [isNew, setIsNew] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -91,7 +93,11 @@ export default function Admin() {
           <h1>Card admin</h1>
           <Link to="/" className="admin-back">← View directory</Link>
         </div>
-        <button className="btn primary" onClick={startNew}>+ New card</button>
+        <div className="admin-head-right">
+          {user && <span className="admin-user">{user.email}</span>}
+          <button className="btn primary" onClick={startNew}>+ New card</button>
+          <button className="btn ghost" onClick={() => logout()}>Sign out</button>
+        </div>
       </header>
 
       {msg && <p className="admin-msg">{msg}</p>}

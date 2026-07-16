@@ -1,0 +1,8 @@
+{
+  "rules": {
+    "cards": {
+      ".read": true,
+      ".write": "auth != null"
+    }
+  }
+}

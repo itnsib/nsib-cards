@@ -2,12 +2,14 @@ import { useParams, Link } from "react-router-dom";
 import { useState, useMemo } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import { useCard, company } from "../lib/cardsDb";
+import { useAuth } from "../lib/auth";
 import { downloadVCard } from "../lib/vcard";
 import "./CardPage.css";
 
 export default function CardPage() {
   const { slug } = useParams();
   const card = useCard(slug);
+  const user = useAuth();
   const [nfcStatus, setNfcStatus] = useState("");
   const [shareMsg, setShareMsg] = useState("");
   const [showQR, setShowQR] = useState(false);
@@ -38,7 +40,7 @@ export default function CardPage() {
   }
 
   const accent = card.accent || "#C62727";
-  const isAdmin = sessionStorage.getItem("nsib_admin_ok") === "1";
+  const isAdmin = !!user;
 
   async function writeNfc() {
     if (!("NDEFReader" in window)) {

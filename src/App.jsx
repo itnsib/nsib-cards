@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Directory from "./pages/Directory";
 import CardPage from "./pages/CardPage";
 import Admin from "./pages/Admin";
-import PasswordGate from "./pages/PasswordGate";
+import LoginGate from "./pages/PasswordGate";
 
 export default function App() {
   return (
@@ -13,9 +13,9 @@ export default function App() {
         <Route
           path="/admin"
           element={
-            <PasswordGate>
+            <LoginGate>
               <Admin />
-            </PasswordGate>
+            </LoginGate>
           }
         />
       </Routes>
