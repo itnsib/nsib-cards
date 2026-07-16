@@ -109,25 +109,23 @@ export default function CardPage() {
             {card.location && <Row label="Location" value={card.location} />}
           </ul>
 
-          {isAdmin && (
-            <>
-              <div className="share-tools">
-                <button className="tool" onClick={() => setShowQR((v) => !v)}>
-                  {showQR ? "Hide QR code" : "Show QR code"}
-                </button>
-                <button className="tool" onClick={writeNfc}>Write to NFC tag</button>
-              </div>
+          <div className="share-tools">
+            <button className="tool" onClick={() => setShowQR((v) => !v)}>
+              {showQR ? "Hide QR code" : "Show QR code"}
+            </button>
+            {isAdmin && (
+              <button className="tool" onClick={writeNfc}>Write to NFC tag</button>
+            )}
+          </div>
 
-              {showQR && (
-                <div className="qr">
-                  <QRCodeCanvas value={cardUrl} size={168} fgColor="#0A1F3C" level="M" includeMargin />
-                  <span>Scan to open this card</span>
-                </div>
-              )}
-
-              {nfcStatus && <p className="nfc-status">{nfcStatus}</p>}
-            </>
+          {showQR && (
+            <div className="qr">
+              <QRCodeCanvas value={cardUrl} size={168} fgColor="#0A1F3C" level="M" includeMargin />
+              <span>Scan to open this card</span>
+            </div>
           )}
+
+          {isAdmin && nfcStatus && <p className="nfc-status">{nfcStatus}</p>}
         </div>
 
         <div className="card-foot">
